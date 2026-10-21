@@ -1,0 +1,90 @@
+[
+  {
+    "steamAppId": 730,
+    "name": "Counter-Strike 2",
+    "shortDescription": "Shooter táctico competitivo por equipos.",
+    "genres": ["Action", "Free to Play"],
+    "developers": ["Valve"],
+    "publishers": ["Valve"],
+    "releaseDate": "2012-08-21",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/730/header.jpg",
+    "isFree": true
+  },
+  {
+    "steamAppId": 570,
+    "name": "Dota 2",
+    "shortDescription": "MOBA por equipos con cientos de héroes.",
+    "genres": ["Action", "Strategy", "Free to Play"],
+    "developers": ["Valve"],
+    "publishers": ["Valve"],
+    "releaseDate": "2013-07-09",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/570/header.jpg",
+    "isFree": true
+  },
+  {
+    "steamAppId": 1091500,
+    "name": "Cyberpunk 2077",
+    "shortDescription": "RPG de mundo abierto en la ciudad de Night City.",
+    "genres": ["RPG", "Action"],
+    "developers": ["CD PROJEKT RED"],
+    "publishers": ["CD PROJEKT RED"],
+    "releaseDate": "2020-12-10",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg",
+    "isFree": false
+  },
+  {
+    "steamAppId": 1245620,
+    "name": "ELDEN RING",
+    "shortDescription": "RPG de acción en un mundo abierto de fantasía oscura.",
+    "genres": ["RPG", "Action"],
+    "developers": ["FromSoftware"],
+    "publishers": ["Bandai Namco Entertainment"],
+    "releaseDate": "2022-02-25",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg",
+    "isFree": false
+  },
+  {
+    "steamAppId": 292030,
+    "name": "The Witcher 3: Wild Hunt",
+    "shortDescription": "RPG de mundo abierto protagonizado por Geralt de Rivia.",
+    "genres": ["RPG"],
+    "developers": ["CD PROJEKT RED"],
+    "publishers": ["CD PROJEKT RED"],
+    "releaseDate": "2015-05-18",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg",
+    "isFree": false
+  },
+  {
+    "steamAppId": 1145360,
+    "name": "Hades",
+    "shortDescription": "Roguelike de acción ambientado en el inframundo griego.",
+    "genres": ["Action", "Indie", "RPG"],
+    "developers": ["Supergiant Games"],
+    "publishers": ["Supergiant Games"],
+    "releaseDate": "2020-09-17",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/1145360/header.jpg",
+    "isFree": false
+  },
+  {
+    "steamAppId": 413150,
+    "name": "Stardew Valley",
+    "shortDescription": "Simulador de granja con exploración, minería y vida social.",
+    "genres": ["Indie", "RPG", "Simulation"],
+    "developers": ["ConcernedApe"],
+    "publishers": ["ConcernedApe"],
+    "releaseDate": "2016-02-26",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/413150/header.jpg",
+    "isFree": false
+  },
+  {
+    "steamAppId": 1086940,
+    "name": "Baldur's Gate 3",
+    "shortDescription": "RPG por turnos basado en las reglas de Dungeons & Dragons.",
+    "genres": ["RPG", "Strategy", "Adventure"],
+    "developers": ["Larian Studios"],
+    "publishers": ["Larian Studios"],
+    "releaseDate": "2023-08-03",
+    "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/1086940/header.jpg",
+    "isFree": false
+  }
+]
