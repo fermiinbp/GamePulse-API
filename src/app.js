@@ -1,3 +1,6 @@
+require("./models/User");
+require("./models/Game");
+
 const express = require("express");
 const manejarErrores = require("./middlewares/manejarErrores");
 
