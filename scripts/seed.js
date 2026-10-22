@@ -1,26 +1,45 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const Game = require('../src/models/Game');
-const games = require('./games.json');
+require("dotenv").config();
+const mongoose = require("mongoose");
+const Game = require("../src/models/Game");
+const User = require("../src/models/User");
+const games = require("./games.json");
+const users = require("./users.json");
+
+async function dropIfExists(model) {
+  try {
+    await model.collection.drop();
+    console.log(`Colección "${model.collection.name}" eliminada`);
+  } catch (err) {
+    // 26 = NamespaceNotFound: la colección aún no existe, no es un error real
+    if (err.code !== 26) throw err;
+  }
+}
 
 async function seed() {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.DB_NAME,
+  });
 
-  const ops = games.map((game) => ({
-    updateOne: {
-      filter: { steamAppId: game.steamAppId },
-      update: { $set: game },
-      upsert: true,
-    },
-  }));
+  // 1. Eliminar colecciones (incluye los índices antiguos)
+  await dropIfExists(Game);
+  await dropIfExists(User);
 
-  const result = await Game.bulkWrite(ops);
-  console.log(`Insertados: ${result.upsertedCount} | Actualizados: ${result.modifiedCount}`);
+  // 2. Recrear colecciones e índices según los schemas actuales
+  await Game.syncIndexes();
+  await User.syncIndexes();
+
+  // 3. Insertar datos nuevos
+  const resultGames = await Game.insertMany(games);
+  const resultUsers = await User.insertMany(users);
+
+  console.log(`Juegos insertados: ${resultGames.length}`);
+  console.log(`Usuarios insertados: ${resultUsers.length}`);
 
   await mongoose.disconnect();
 }
 
-seed().catch((err) => {
+seed().catch(async (err) => {
   console.error(err);
+  await mongoose.disconnect();
   process.exit(1);
 });

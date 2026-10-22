@@ -1,7 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    /* _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      unique: true,
+      trim: true,
+    }, */
     username: {
       type: String,
       required: true,
@@ -24,11 +30,11 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['USER', 'ANALYST', 'ADMIN'],
-      default: 'USER',
+      enum: ["USER", "ANALYST", "ADMIN"],
+      default: "USER",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
