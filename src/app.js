@@ -1,18 +1,16 @@
-const express = require('express');
-const cors = require('cors');
+const express = require("express");
+const manejarErrores = require("./middlewares/manejarErrores");
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-app.use((req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
+app.use("/api/games", require("./routes/game.routes"));
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({ error: err.message || 'Error interno' });
-});
+app.use((req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
+
+app.use(manejarErrores);
 
 module.exports = app;

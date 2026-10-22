@@ -1,21 +1,16 @@
-require('./models/User');
-require('./models/Game');
+require("dotenv").config();
+const app = require("./app");
+const mongoose = require("mongoose");
 
-const express = require('express');
-const cors = require('cors');
+const PORT = process.env.PORT || 3000;
 
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
-
-app.use((req, res) => res.status(404).json({ error: 'Ruta no encontrada' }));
-
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({ error: err.message || 'Error interno' });
-});
-
-module.exports = app;
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("MongoDB conectado");
+    app.listen(PORT, () => console.log(`API en http://localhost:${PORT}`));
+  })
+  .catch((err) => {
+    console.error("Error al conectar con MongoDB:", err.message);
+    process.exit(1);
+  });
