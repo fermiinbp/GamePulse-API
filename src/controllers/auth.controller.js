@@ -1,34 +1,28 @@
-const authService = require("../services/auth.service");
+const authServices = require("../services/auth.service");
 
-// POST /api/auth/register
-async function registrar(req, res) {
-    const { username, email, password } = req.body;
-
-    if (typeof username !== "string" || typeof email !== "string" || typeof password !== "string") {
-        return res.status(400).json({ error: "Username, email y contraseña son obligatorios" });
-    }
-    if (password.length < 6) {
-        return res.status(400).json({ error: "La contraseña debe tener al menos 6 caracteres" });
-    }
-
-    const usuario = await authService.registrar({ username, email, password });
-    res.status(201).json(usuario.resumen());
+async function registro(req, res) {
+    const resultado = await authServices.registrar(req.body);
+    res.status(201).json(resultado);
 }
 
-// POST /api/auth/login
 async function login(req, res) {
     const { email, password } = req.body;
-
     if (typeof email !== "string" || typeof password !== "string") {
-        return res.status(400).json({ error: "Email y contraseña son obligatorios" });
+        return res.status(400).json({ error: "Email y password son obligatorios" });
     }
-
-    const resultado = await authService.login(email, password);
+    const resultado = await authServices.login(email, password);
     if (!resultado) {
-        return res.status(401).json({ error: "Credenciales incorrectas" });
+        return res.status(401).json({ error: "Email o contraseña incorrectos" });
     }
-
-    res.json({ token: resultado.token, usuario: resultado.usuario.resumen() });
+    res.json(resultado);
 }
 
-module.exports = { registrar, login };
+async function perfil(req, res) {
+    const usuario = await authServices.buscarPorId(req.usuario.id);
+    if (!usuario) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    res.json(usuario);
+}
+
+module.exports = { registro, login, perfil };

@@ -1,5 +1,8 @@
 const { Router } = require("express");
 const validarId = require("../middlewares/validarId");
+const autenticar = require("../middlewares/autenticar");
+const autorizar = require("../middlewares/autorizar");
+const { historial, trending } = require("../controllers/stats.controller");
 const { listar, obtener, crear, actualizar, eliminar } = require("../controllers/game.controller");
 
 const router = Router();
@@ -29,6 +32,11 @@ const router = Router();
  *                 $ref: '#/components/schemas/Game'
  */
 router.get("/", listar);
+
+router.get("/trending", trending);
+
+
+router.get("/:id/stats", validarId, historial);
 
 /**
  * @openapi
@@ -97,7 +105,7 @@ router.get("/:id", validarId, obtener);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/", crear);
+router.post("/", autenticar, autorizar("admin"), crear);
 
 /**
  * @openapi
@@ -139,7 +147,7 @@ router.post("/", crear);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch("/:id", validarId, actualizar);
+router.patch("/:id", autenticar, autorizar("admin", "analista"), validarId, actualizar);
 
 /**
  * @openapi
@@ -170,6 +178,6 @@ router.patch("/:id", validarId, actualizar);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete("/:id", validarId, eliminar);
+router.delete("/:id", autenticar, autorizar("admin"), validarId, eliminar);
 
 module.exports = router;

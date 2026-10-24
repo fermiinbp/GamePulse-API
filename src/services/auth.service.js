@@ -1,26 +1,31 @@
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const Usuario = require("../models/Usuario");
 
-async function registrar({ username, email, password }) {
-    const hash = await bcrypt.hash(password, 10);
-    return User.create({ username, email, password: hash });
+function generarToken(usuario) {
+    return jwt.sign(
+        { id: usuario.id, rol: usuario.rol },
+        process.env.JWT_SECRET,
+        { expiresIn: process.env.JWT_EXPIRES_IN }
+    );
+}
+
+async function registrar({ nombre, email, password }) {
+    const usuario = await Usuario.create({ nombre, email, password });
+    return { usuario, token: generarToken(usuario) };
 }
 
 async function login(email, password) {
-    const usuario = await User.findOne({ email: email.toLowerCase() }).select("+password");
+    const usuario = await Usuario.findOne({ email: email.toLowerCase() }).select("+password");
     if (!usuario) return null;
 
-    const coincide = await bcrypt.compare(password, usuario.password);
+    const coincide = await usuario.comprobarPassword(password);
     if (!coincide) return null;
 
-    const token = jwt.sign(
-        { id: usuario.id, role: usuario.role },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-    );
-
-    return { token, usuario };
+    return { usuario, token: generarToken(usuario) };
 }
 
-module.exports = { registrar, login };
+async function buscarPorId(id) {
+    return Usuario.findById(id);
+}
+
+module.exports = { registrar, login, buscarPorId };
