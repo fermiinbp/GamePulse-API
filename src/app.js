@@ -1,4 +1,3 @@
-require("./models/User");
 require("./models/Game");
 require("./models/GameStat");
 
