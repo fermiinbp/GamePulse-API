@@ -1,0 +1,72 @@
+[
+  {
+    "_id": "671a00000000000000000001",
+    "username": "carlos_dev",
+    "email": "carlos.dev@example.com",
+    "password": "TestPass123!",
+    "role": "ADMIN"
+  },
+  {
+    "_id": "671a00000000000000000002",
+    "username": "lucia_gamer",
+    "email": "lucia.gamer@example.com",
+    "password": "TestPass123!",
+    "role": "ANALYST"
+  },
+  {
+    "_id": "671a00000000000000000003",
+    "username": "miguel_23",
+    "email": "miguel23@example.com",
+    "password": "TestPass123!",
+    "role": "USER"
+  },
+  {
+    "_id": "671a00000000000000000004",
+    "username": "sara_codes",
+    "email": "sara.codes@example.com",
+    "password": "TestPass123!",
+    "role": "USER"
+  },
+  {
+    "_id": "671a00000000000000000005",
+    "username": "david_player",
+    "email": "david.player@example.com",
+    "password": "TestPass123!",
+    "role": "USER"
+  },
+  {
+    "_id": "671a00000000000000000006",
+    "username": "ana_analyst",
+    "email": "ana.analyst@example.com",
+    "password": "TestPass123!",
+    "role": "ANALYST"
+  },
+  {
+    "_id": "671a00000000000000000007",
+    "username": "pablo_gaming",
+    "email": "pablo.gaming@example.com",
+    "password": "TestPass123!",
+    "role": "USER"
+  },
+  {
+    "_id": "671a00000000000000000008",
+    "username": "elena_dev",
+    "email": "elena.dev@example.com",
+    "password": "TestPass123!",
+    "role": "USER"
+  },
+  {
+    "_id": "671a00000000000000000009",
+    "username": "admin_test",
+    "email": "admin.test@example.com",
+    "password": "TestPass123!",
+    "role": "ADMIN"
+  },
+  {
+    "_id": "671a0000000000000000000a",
+    "username": "jorge_data",
+    "email": "jorge.data@example.com",
+    "password": "TestPass123!",
+    "role": "USER"
+  }
+]

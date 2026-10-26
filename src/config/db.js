@@ -1,8 +1,14 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 async function connectDB() {
-  await mongoose.connect(process.env.MONGODB_URI);
-  console.log('MongoDB conectado');
+  await mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.DB_NAME,
+  });
+  console.log("MongoDB conectado");
 }
 
-module.exports = connectDB;
+async function desconectar() {
+  await mongoose.disconnect();
+}
+
+module.exports = { connectDB, desconectar };
