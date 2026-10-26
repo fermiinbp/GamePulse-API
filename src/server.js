@@ -3,8 +3,9 @@ const express = require("express");
 require("./models/User");
 
 const routerAuth = require("./routes/auth.routes.js");
+const routerGameList = require("./routes/gamelist.routes.js");
 const { connectDB } = require("./config/db.js");
-const logger = require("./middleware/logger.js");
+const logger = require("./middlewares/logger.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(logger);
 app.use("/auth", routerAuth);
+app.use("/gamelist", routerGameList);
 
 app.use((req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
 app.use((err, req, res, next) => {
