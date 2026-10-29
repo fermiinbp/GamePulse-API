@@ -1,5 +1,3 @@
-//Crear la funcion esIdValida en game.service
-
 const { esIdValida } = require("../services/game.service");
 
 function validarId(req, res, next) {

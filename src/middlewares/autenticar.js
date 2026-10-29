@@ -8,7 +8,7 @@ function autenticar(req, res, next) {
   const token = cabecera.split(" ")[1];
   try {
     const datos = jwt.verify(token, process.env.JWT_SECRET);
-    req.usuario = { id: datos.id, rol: datos.rol };
+    req.usuario = { id: datos.id, role: datos.role };
     next();
   } catch (error) {
     return res.status(401).json({ error: "Token no valido" });

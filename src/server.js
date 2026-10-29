@@ -3,32 +3,39 @@ const express = require("express");
 require("./models/User");
 
 const routerAuth = require("./routes/auth.routes.js");
+const routerGames = require("./routes/game.routes.js");
+const routerResena = require("./routes/review.routes.js")
+//const routerGameList = require("./routes/gamelist.routes.js");
 const { connectDB } = require("./config/db.js");
-const logger = require("./middleware/logger.js");
+const logger = require("./middlewares/logger.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(logger);
+
+app.get("/api/health", (req, res) => res.json({ status: "ok" }));
+app.use("/review", routerResena);
 app.use("/auth", routerAuth);
+app.use("/games", routerGames);
+//app.use("/gamelist", routerGameList);
 
 app.use((req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({ error: err.message || "Error interno" });
+console.error(err);
+res.status(err.status || 500).json({ error: err.message || "Error interno" });
 });
 
-app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 async function arrancar() {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log(`Conectada y corriendo en http://localhost:${PORT}`);
-  });
+await connectDB();
+app.listen(PORT, () => {
+console.log(`Conectada y corriendo en http://localhost:${PORT}`);
+});
 }
 
 arrancar().catch((error) => {
-  console.error(error.message);
-  process.exit(1);
+console.error(error.message);
+process.exit(1);
 });

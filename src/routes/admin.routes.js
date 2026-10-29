@@ -5,6 +5,6 @@ const { sincronizar } = require("../controllers/stats.controller");
 
 const router = Router();
 
-router.post("/sync", autenticar, autorizar("admin"), sincronizar);
+router.post("/sync", autenticar, autorizar("ADMIN"), sincronizar);
 
 module.exports = router;

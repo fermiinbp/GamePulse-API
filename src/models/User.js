@@ -50,7 +50,7 @@ userSchema.set("toJson", {
       id: doc.id,
       nombre: ret.nombre,
       email: ret.email,
-      rol: ret.rol,
+      role: ret.role,
     };
   },
 });

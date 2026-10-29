@@ -105,7 +105,7 @@ router.get("/:id", validarId, obtener);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/", autenticar, autorizar("admin"), crear);
+router.post("/", autenticar, autorizar("ADMIN"), crear);
 
 /**
  * @openapi
@@ -147,7 +147,7 @@ router.post("/", autenticar, autorizar("admin"), crear);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch("/:id", autenticar, autorizar("admin", "analista"), validarId, actualizar);
+router.patch("/:id", autenticar, autorizar("ADMIN", "ANALYST"), validarId, actualizar);
 
 /**
  * @openapi
@@ -178,6 +178,6 @@ router.patch("/:id", autenticar, autorizar("admin", "analista"), validarId, actu
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete("/:id", autenticar, autorizar("admin"), validarId, eliminar);
+router.delete("/:id", autenticar, autorizar("ADMIN"), validarId, eliminar);
 
 module.exports = router;
