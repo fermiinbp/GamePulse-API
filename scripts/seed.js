@@ -1,4 +1,5 @@
 require("dotenv").config();
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const Game = require("../src/models/Game");
 const User = require("../src/models/User");
@@ -25,6 +26,7 @@ async function seed() {
   // 1. Eliminar colecciones (incluye los índices antiguos)
   await dropIfExists(Game);
   await dropIfExists(User);
+  await dropIfExists(GameList);
 
   // 2. Recrear colecciones e índices según los schemas actuales
   await Game.syncIndexes();
@@ -33,7 +35,13 @@ async function seed() {
 
   // 3. Insertar datos nuevos
   const resultGames = await Game.insertMany(games);
-  const resultUsers = await User.insertMany(users);
+  const usersConPasswordHash = await Promise.all(
+    users.map(async (user) => ({
+      ...user,
+      password: await bcrypt.hash(user.password, 10),
+    })),
+  );
+  const resultUsers = await User.insertMany(usersConPasswordHash);
   const resultGameList = await GameList.insertMany(gamelist);
 
   console.log(`Juegos insertados: ${resultGames.length}`);

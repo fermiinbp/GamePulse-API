@@ -23,6 +23,10 @@ const gameListSchema = new mongoose.Schema(
         ref: "Game",
       },
     ],
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -30,5 +34,17 @@ const gameListSchema = new mongoose.Schema(
 );
 
 gameListSchema.index({ owner: 1, name: 1 });
+
+gameListSchema.methods.resumen = function () {
+  return {
+    _id: this._id,
+    name: this.name,
+    owner: this.owner,
+    games: this.games,
+    isPublic: this.isPublic,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+  };
+};
 
 module.exports = mongoose.model("GameList", gameListSchema);

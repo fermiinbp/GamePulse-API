@@ -6,7 +6,7 @@ function generarToken(usuario) {
   return jwt.sign(
     {
       id: usuario.id,
-      rol: usuario.rol,
+      role: usuario.role,
     },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN },
@@ -14,6 +14,16 @@ function generarToken(usuario) {
 }
 
 async function registrar({ username, email, password }) {
+  if (
+    typeof password !== "string" ||
+    password.lenth < 6 ||
+    password.length > 20
+  ) {
+    const error = new Error("La contraseña debe tener entre 6 y 20 caracteres");
+    error.status = 400;
+    throw error;
+  }
+
   const usuario = await User.create({ username, email, password });
   return { usuario, token: generarToken(usuario) };
 }

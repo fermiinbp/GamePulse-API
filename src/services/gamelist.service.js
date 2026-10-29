@@ -3,8 +3,28 @@ const User = require("../models/User");
 const Game = require("../models/Game");
 const GameList = require("../models/GameList");
 
-async function listarGameList() {
-  return GameList.find();
+function construirFiltro({ name, games, owner, isPublic }) {
+  const filtro = {};
+  if (name) filtro.name = name;
+  if (games) filtro.games;
+  if (owner) filtro.owner = owner;
+  if (isPublic === true) {
+    filtro.isPublic = true;
+  }
+  return filtro;
+}
+
+async function listarGameList(filtros, orden, pagina, limite) {
+  const filtro = construirFiltro(filtros);
+  const [gameslists, total] = await Promise.all([
+    GameList.find(filtro)
+      .sort(orden)
+      .skip((pagina - 1) * limite)
+      .limit(limite),
+    GameList.countDocuments(filtro),
+  ]);
+
+  return { gameslists, total };
 }
 
 async function buscarPorId(id) {
