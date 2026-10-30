@@ -41,6 +41,9 @@ app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 // Documentación
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Página de inicio: al entrar en la raíz se abre la documentación
+app.get("/", (req, res) => res.redirect("/api-docs"));
+
 // Rutas
 app.use("/api/auth", routerAuth);
 app.use("/api/games", routerGames);
