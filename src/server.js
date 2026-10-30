@@ -1,41 +1,67 @@
-require("dotenv").config({ quite: true });
-const express = require("express");
-require("./models/User");
+require("dotenv").config({ quiet: true });
 
-const routerAuth = require("./routes/auth.routes.js");
-const routerGames = require("./routes/game.routes.js");
-const routerResena = require("./routes/review.routes.js")
-//const routerGameList = require("./routes/gamelist.routes.js");
-const { connectDB } = require("./config/db.js");
-const logger = require("./middlewares/logger.js");
+const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+
+const swaggerSpec = require("./config/swagger");
+const { connectDB } = require("./config/db");
+const logger = require("./middlewares/logger");
+const manejarErrores = require("./middlewares/manejarErrores");
+
+const routerAuth = require("./routes/auth.routes");
+const routerGames = require("./routes/game.routes");
+const routerReviews = require("./routes/review.routes");
+const routerAdmin = require("./routes/admin.routes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middlewares globales
 app.use(express.json());
 app.use(logger);
 
+/**
+ * @openapi
+ * /api/health:
+ *   get:
+ *     tags: [Health]
+ *     summary: Comprobar que la API está levantada
+ *     responses:
+ *       200:
+ *         description: La API responde
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status: { type: string, example: ok }
+ */
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
-app.use("/review", routerResena);
-app.use("/auth", routerAuth);
-app.use("/games", routerGames);
-//app.use("/gamelist", routerGameList);
 
+// Documentación
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Rutas
+app.use("/api/auth", routerAuth);
+app.use("/api/games", routerGames);
+app.use("/api/reviews", routerReviews);
+app.use("/api/admin", routerAdmin);
+
+// Ruta no encontrada
 app.use((req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
-app.use((err, req, res, next) => {
-console.error(err);
-res.status(err.status || 500).json({ error: err.message || "Error interno" });
-});
 
+// Manejo de errores (siempre el último)
+app.use(manejarErrores);
 
 async function arrancar() {
-await connectDB();
-app.listen(PORT, () => {
-console.log(`Conectada y corriendo en http://localhost:${PORT}`);
-});
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Documentación en http://localhost:${PORT}/api-docs`);
+  });
 }
 
 arrancar().catch((error) => {
-console.error(error.message);
-process.exit(1);
+  console.error(error.message);
+  process.exit(1);
 });

@@ -44,11 +44,11 @@ class User {
 
 userSchema.loadClass(User);
 
-userSchema.set("toJson", {
+userSchema.set("toJSON", {
   transform(doc, ret) {
     return {
       id: doc.id,
-      nombre: ret.nombre,
+      username: ret.username,
       email: ret.email,
       role: ret.role,
     };

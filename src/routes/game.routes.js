@@ -33,9 +33,70 @@ const router = Router();
  */
 router.get("/", listar);
 
+/**
+ * @openapi
+ * /api/games/trending:
+ *   get:
+ *     tags: [Games]
+ *     summary: Videojuegos con más jugadores ahora mismo
+ *     description: Usa la última foto de estadísticas de cada juego y los ordena por jugadores.
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 20
+ *           default: 5
+ *         description: Número de videojuegos a devolver
+ *     responses:
+ *       200:
+ *         description: Ranking de videojuegos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Trending'
+ */
 router.get("/trending", trending);
 
-
+/**
+ * @openapi
+ * /api/games/{id}/stats:
+ *   get:
+ *     tags: [Games]
+ *     summary: Historial de estadísticas de un videojuego
+ *     description: Devuelve las últimas 30 fotos (jugadores y precio), de la más reciente a la más antigua.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Id del videojuego en MongoDB
+ *     responses:
+ *       200:
+ *         description: Historial de estadísticas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/GameStat'
+ *       400:
+ *         description: El id no es válido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       404:
+ *         description: Videojuego no encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
 router.get("/:id/stats", validarId, historial);
 
 /**
@@ -79,6 +140,9 @@ router.get("/:id", validarId, obtener);
  *   post:
  *     tags: [Games]
  *     summary: Crear un videojuego
+ *     description: Solo ADMIN.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -98,6 +162,10 @@ router.get("/:id", validarId, obtener);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         $ref: '#/components/responses/NoAutenticado'
+ *       403:
+ *         $ref: '#/components/responses/SinPermisos'
  *       409:
  *         description: Ya existe un videojuego con ese steamAppId
  *         content:
@@ -113,7 +181,9 @@ router.post("/", autenticar, autorizar("ADMIN"), crear);
  *   patch:
  *     tags: [Games]
  *     summary: Actualizar un videojuego
- *     description: Se pueden mandar solo los campos que se quieran modificar.
+ *     description: Se pueden mandar solo los campos que se quieran modificar. Solo ADMIN o ANALYST.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -140,6 +210,10 @@ router.post("/", autenticar, autorizar("ADMIN"), crear);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         $ref: '#/components/responses/NoAutenticado'
+ *       403:
+ *         $ref: '#/components/responses/SinPermisos'
  *       404:
  *         description: Videojuego no encontrado
  *         content:
@@ -155,6 +229,9 @@ router.patch("/:id", autenticar, autorizar("ADMIN", "ANALYST"), validarId, actua
  *   delete:
  *     tags: [Games]
  *     summary: Eliminar un videojuego
+ *     description: Solo ADMIN.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -171,6 +248,10 @@ router.patch("/:id", autenticar, autorizar("ADMIN", "ANALYST"), validarId, actua
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         $ref: '#/components/responses/NoAutenticado'
+ *       403:
+ *         $ref: '#/components/responses/SinPermisos'
  *       404:
  *         description: Videojuego no encontrado
  *         content:

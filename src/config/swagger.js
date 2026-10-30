@@ -1,3 +1,4 @@
+const path = require("path");
 const swaggerJsdoc = require("swagger-jsdoc");
 
 // Campos de un videojuego, reutilizados en varios esquemas
@@ -43,14 +44,144 @@ const options = {
                     type: "object",
                     properties: propiedadesJuego
                 },
+                User: {
+                    type: "object",
+                    properties: {
+                        id: { type: "string", example: "665f1c2e9b1e8a0012a3b4c6" },
+                        username: { type: "string", example: "fermin" },
+                        email: { type: "string", example: "fermin@example.com" },
+                        role: { type: "string", enum: ["USER", "ADMIN", "ANALYST"], example: "USER" }
+                    }
+                },
+                RegistroInput: {
+                    type: "object",
+                    required: ["username", "email", "password"],
+                    properties: {
+                        username: { type: "string", minLength: 3, maxLength: 30, example: "fermin" },
+                        email: { type: "string", format: "email", example: "fermin@example.com" },
+                        password: { type: "string", minLength: 6, maxLength: 20, example: "secreto123" }
+                    }
+                },
+                LoginInput: {
+                    type: "object",
+                    required: ["email", "password"],
+                    properties: {
+                        email: { type: "string", format: "email", example: "fermin@example.com" },
+                        password: { type: "string", example: "secreto123" }
+                    }
+                },
+                AuthResponse: {
+                    type: "object",
+                    properties: {
+                        usuario: { $ref: "#/components/schemas/User" },
+                        token: { type: "string", example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
+                    }
+                },
+                Review: {
+                    type: "object",
+                    properties: {
+                        id: { type: "string", example: "665f1c2e9b1e8a0012a3b4c7" },
+                        userId: { type: "string", example: "665f1c2e9b1e8a0012a3b4c6" },
+                        username: { type: "string", example: "fermin" },
+                        gameId: { type: "string", example: "665f1c2e9b1e8a0012a3b4c5" },
+                        rating: { type: "integer", minimum: 1, maximum: 5, example: 4 },
+                        comment: { type: "string", example: "Muy buen juego" },
+                        createdAt: { type: "string", format: "date-time" }
+                    }
+                },
+                ReviewInput: {
+                    type: "object",
+                    required: ["gameId", "rating"],
+                    properties: {
+                        gameId: { type: "string", example: "665f1c2e9b1e8a0012a3b4c5" },
+                        rating: { type: "integer", minimum: 1, maximum: 5, example: 4 },
+                        comment: { type: "string", maxLength: 500, example: "Muy buen juego" }
+                    }
+                },
+                ReviewUpdate: {
+                    type: "object",
+                    properties: {
+                        rating: { type: "integer", minimum: 1, maximum: 5, example: 5 },
+                        comment: { type: "string", maxLength: 500, example: "Mejor de lo que pensaba" }
+                    }
+                },
+                ReviewStats: {
+                    type: "object",
+                    properties: {
+                        positivas: { type: "integer", example: 12 },
+                        negativas: { type: "integer", example: 3 }
+                    }
+                },
+                GameStat: {
+                    type: "object",
+                    properties: {
+                        id: { type: "string", example: "665f1c2e9b1e8a0012a3b4c8" },
+                        gameId: { type: "string", example: "665f1c2e9b1e8a0012a3b4c5" },
+                        recordedAt: { type: "string", format: "date-time" },
+                        currentPlayers: { type: "integer", example: 54321 },
+                        price: { type: "number", nullable: true, example: 59.99 },
+                        discountPercent: { type: "integer", example: 0 },
+                        currency: { type: "string", example: "EUR" }
+                    }
+                },
+                Trending: {
+                    type: "object",
+                    properties: {
+                        juego: {
+                            type: "object",
+                            properties: {
+                                id: { type: "string", example: "665f1c2e9b1e8a0012a3b4c5" },
+                                name: { type: "string", example: "ELDEN RING" },
+                                headerImage: { type: "string" }
+                            }
+                        },
+                        currentPlayers: { type: "integer", example: 54321 },
+                        price: { type: "number", nullable: true, example: 59.99 },
+                        discountPercent: { type: "integer", example: 0 },
+                        currency: { type: "string", example: "EUR" },
+                        recordedAt: { type: "string", format: "date-time" }
+                    }
+                },
+                SyncResult: {
+                    type: "object",
+                    properties: {
+                        total: { type: "integer", example: 20 },
+                        correctos: { type: "integer", example: 19 },
+                        errores: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    steamAppId: { type: "integer", example: 1245620 },
+                                    name: { type: "string", example: "ELDEN RING" },
+                                    error: { type: "string", example: "Steam respondió 500 al pedir el precio" }
+                                }
+                            }
+                        }
+                    }
+                },
                 Error: {
                     type: "object",
                     properties: { error: { type: "string", example: "Videojuego no encontrado" } }
                 }
+            },
+            responses: {
+                NoAutenticado: {
+                    description: "Falta el token o no es válido",
+                    content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } }
+                },
+                SinPermisos: {
+                    description: "El usuario no tiene el rol necesario",
+                    content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } }
+                }
             }
         }
     },
-    apis: ["./src/routes/*.js"]
+    // Rutas absolutas para que funcione sin importar desde qué carpeta se arranque
+    apis: [
+        path.join(__dirname, "../server.js"),
+        path.join(__dirname, "../routes/*.js")
+    ]
 };
 
 module.exports = swaggerJsdoc(options);
