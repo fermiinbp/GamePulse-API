@@ -1,34 +1,66 @@
-require("dotenv").config({ quite: true });
+require("dotenv").config({ quiet: true });
+
 const express = require("express");
-require("./models/User");
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
+
 const swaggerSpec = require("./config/swagger");
-const routerAuth = require("./routes/auth.routes.js");
-const routerGames = require("./routes/game.routes.js");
-const routerGameList = require("./routes/gamelist.routes.js");
-const { connectDB } = require("./config/db.js");
-const logger = require("./middlewares/logger.js");
+const { connectDB } = require("./config/db");
+const logger = require("./middlewares/logger");
+const manejarErrores = require("./middlewares/manejarErrores");
+
+const routerAuth = require("./routes/auth.routes");
+const routerGames = require("./routes/game.routes");
+const routerReviews = require("./routes/review.routes");
+const routerGameList = require("./routes/gamelist.routes");
+const routerAdmin = require("./routes/admin.routes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS: URLs del front separadas por comas en CORS_ORIGIN (sin definir = cualquier origen)
+const origenes = process.env.CORS_ORIGIN?.split(",").map((o) => o.trim());
+app.use(cors({ origin: origenes || "*" }));
+
 app.use(express.json());
 app.use(logger);
+
+/**
+ * @openapi
+ * /health:
+ *   get:
+ *     tags: [Health]
+ *     summary: Comprobar que la API está levantada
+ *     responses:
+ *       200:
+ *         description: La API responde
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status: { type: string, example: ok }
+ */
+app.get("/health", (req, res) => res.json({ status: "ok" }));
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get("/", (req, res) => res.redirect("/api-docs"));
+
 app.use("/auth", routerAuth);
 app.use("/games", routerGames);
+app.use("/reviews", routerReviews);
 app.use("/gamelist", routerGameList);
-app.get("/api/health", (req, res) => res.json({ status: "ok" }));
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/admin", routerAdmin);
+
 app.use((req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(err.status || 500).json({ error: err.message || "Error interno" });
-});
+
+app.use(manejarErrores);
 
 async function arrancar() {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`Conectada y corriendo en http://localhost:${PORT}`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Documentación en http://localhost:${PORT}/api-docs`);
   });
 }
 

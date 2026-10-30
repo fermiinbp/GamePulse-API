@@ -1,16 +1,21 @@
 function manejarErrores(err, req, res, next) {
-  if (error.type === "entity.parse.failed") {
+  if (err.type === "entity.parse.failed") {
     return res.status(400).json({ error: "El body está mal" });
   }
-  if (err.type === "ValidationError") {
-    const errores = Object.values(err.erros).map((e) => e.message);
-    return res.status(400).json({ erro: "Los datos no son validos" });
+  if (err.name === "ValidationError") {
+    const errores = Object.values(err.errors).map((e) => ({ campo: e.path, mensaje: e.message }));
+    return res.status(400).json({ error: "Los datos no son validos", detalles: errores });
   }
   if (err.name === "CastError") {
-    return req.status(400).json({ error: "Valor no válido" });
+    return res.status(400).json({ error: "Valor no válido" });
   }
   if (err.code === 11000) {
     return res.status(409).json({ error: "Valor repetido" });
+  }
+
+  // Errores con status 4xx (por ejemplo, los que lanza express) se devuelven tal cual
+  if (err.status && err.status < 500) {
+    return res.status(err.status).json({ error: err.message });
   }
 
   console.error("****", err.message);

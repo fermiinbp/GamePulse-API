@@ -1,5 +1,4 @@
 require("dotenv").config();
-const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const Game = require("../src/models/Game");
 const User = require("../src/models/User");
@@ -35,13 +34,8 @@ async function seed() {
 
   // 3. Insertar datos nuevos
   const resultGames = await Game.insertMany(games);
-  const usersConPasswordHash = await Promise.all(
-    users.map(async (user) => ({
-      ...user,
-      password: await bcrypt.hash(user.password, 10),
-    })),
-  );
-  const resultUsers = await User.insertMany(usersConPasswordHash);
+  // create (y no insertMany) para que se ejecute el pre("save") que cifra la contraseña
+  const resultUsers = await User.create(users);
   const resultGameList = await GameList.insertMany(gamelist);
 
   console.log(`Juegos insertados: ${resultGames.length}`);

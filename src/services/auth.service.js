@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 function generarToken(usuario) {
-  console.log("JWT_EXPIRES_IN:", JSON.stringify(process.env.JWT_EXPIRES_IN));
   return jwt.sign(
     {
       id: usuario.id,
@@ -14,16 +13,6 @@ function generarToken(usuario) {
 }
 
 async function registrar({ username, email, password }) {
-  if (
-    typeof password !== "string" ||
-    password.lenth < 6 ||
-    password.length > 20
-  ) {
-    const error = new Error("La contraseña debe tener entre 6 y 20 caracteres");
-    error.status = 400;
-    throw error;
-  }
-
   const usuario = await User.create({ username, email, password });
   return { usuario, token: generarToken(usuario) };
 }

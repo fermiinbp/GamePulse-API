@@ -13,7 +13,8 @@ const validarGameId = require("../middlewares/validarGameId");
 const { eliminarJuego } = require("../controllers/gamelist.controller");
 const router = Router();
 const autenticar = require("../middlewares/autenticar");
-const validarId = require("../middlewares/validarId");
+const validarCampos = require("../middlewares/validarCampos");
+const { idParam } = require("../validators/comun.validator");
 const autorizarGameList = require("../middlewares/autorizarGameList");
 const autenticarOpcional = require("../middlewares/autorizarOpcional");
 const autorizarPropietarioGameList = require("../middlewares/autorizarPropietarioGameList");
@@ -93,7 +94,8 @@ router.get("/mine", autenticar, listarMias);
  */
 router.get(
   "/:id",
-  validarId,
+  idParam,
+  validarCampos,
   autenticarOpcional,
   autorizarGameList,
   buscarPorId,
@@ -161,7 +163,8 @@ router.post("/", autenticar, crearGameList);
 router.post(
   "/:id/games",
   autenticar,
-  validarId,
+  idParam,
+  validarCampos,
   autorizarPropietarioGameList,
   addGame,
 );
@@ -202,7 +205,8 @@ router.post(
 router.patch(
   "/:id",
   autenticar,
-  validarId,
+  idParam,
+  validarCampos,
   autorizarPropietarioGameList,
   actualizar,
 );
@@ -243,7 +247,8 @@ router.patch(
 router.patch(
   "/:id/owners",
   autenticar,
-  validarId,
+  idParam,
+  validarCampos,
   autorizarPropietarioGameList,
   actualizarOwners,
 );
@@ -276,7 +281,8 @@ router.patch(
 router.delete(
   "/:id",
   autenticar,
-  validarId,
+  idParam,
+  validarCampos,
   autorizarPropietarioGameList,
   eliminar,
 );
@@ -317,7 +323,8 @@ router.delete(
 router.delete(
   "/:id/games/:gameId",
   autenticar,
-  validarId,
+  idParam,
+  validarCampos,
   validarGameId,
   autorizarPropietarioGameList,
   eliminarJuego,
