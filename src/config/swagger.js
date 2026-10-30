@@ -188,10 +188,11 @@ const options = {
         }
     },
     // Rutas absolutas para que funcione sin importar desde qué carpeta se arranque
+    // glob solo entiende "/", así que se cambian las "\" que usa Windows
     apis: [
         path.join(__dirname, "../server.js"),
         path.join(__dirname, "../routes/*.js")
-    ]
+    ].map((ruta) => ruta.replace(/\\/g, "/"))
 };
 
 module.exports = swaggerJsdoc(options);
