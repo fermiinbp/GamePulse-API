@@ -2,7 +2,6 @@ const Game = require("../models/Game");
 const GameStat = require("../models/GameStat");
 const steam = require("./steam.service");
 
-// Pide a Steam los datos de un juego y guarda una foto
 async function registrarSnapshot(juego) {
     const jugadores = await steam.obtenerJugadores(juego.steamAppId);
     const precio = await steam.obtenerPrecio(juego.steamAppId);
@@ -14,7 +13,6 @@ async function registrarSnapshot(juego) {
     });
 }
 
-// Recorre todos los juegos; si uno falla, sigue con los demás
 async function sincronizar() {
     const juegos = await Game.find();
     const errores = [];
@@ -36,7 +34,6 @@ async function historial(gameId, limite = 30) {
     return GameStat.find({ gameId }).sort({ recordedAt: -1 }).limit(limite);
 }
 
-// Última foto de cada juego, ordenadas por jugadores
 async function trending(limite = 5) {
     const resultados = await GameStat.aggregate([
         { $sort: { recordedAt: -1 } },
