@@ -1,4 +1,11 @@
-const gamesService = require("../services/game.service")
+const gamesService = require("../services/game.service");
+const statsService = require("../services/stats.service");
+
+// Añade a cada juego su último dato de Steam (precio y jugadores), o null si aún no hay
+async function conUltimaStat(juegos) {
+    const ultimas = await statsService.ultimasDe(juegos.map((g) => g._id));
+    return juegos.map((g) => ({ ...g.resumen(), ultimaStat: ultimas[g.id] || null }));
+}
 
 // GET /games?page=1&limit=10&genero=RPG&buscar=elden&gratis=true&desarrollador=FromSoftware&orden=-releaseDate
 async function listar(req, res) {
@@ -10,7 +17,7 @@ async function listar(req, res) {
     const { data, total } = await gamesService.listar({ genero, buscar, gratis, desarrollador, orden, page, limit });
 
     res.json({
-        data: data.map(g => g.resumen()),
+        data: await conUltimaStat(data),
         page,
         limit,
         total,
@@ -30,7 +37,8 @@ async function obtener(req, res) {
         return res.status(404).json({ error: "Videojuego no encontrado" });
     }
 
-    res.json(game.resumen());
+    const [conStat] = await conUltimaStat([game]);
+    res.json(conStat);
 }
 
 async function crear(req, res) {

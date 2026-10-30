@@ -116,7 +116,20 @@ const options = {
                     type: "object",
                     properties: {
                         id: { type: "string", example: "665f1c2e9b1e8a0012a3b4c5" },
-                        ...propiedadesJuego
+                        ...propiedadesJuego,
+                        ultimaStat: {
+                            type: "object",
+                            nullable: true,
+                            description: "Último dato de Steam guardado en GameStat (null si aún no se ha sincronizado)",
+                            properties: {
+                                currentPlayers: { type: "integer", example: 54321 },
+                                price: { type: "number", example: 59.99 },
+                                discountPercent: { type: "integer", example: 0 },
+                                currency: { type: "string", example: "EUR" },
+                                source: { type: "string", enum: ["steam", "steamspy"], example: "steam" },
+                                recordedAt: { type: "string", format: "date-time" }
+                            }
+                        }
                     }
                 },
                 GamePage: {
@@ -215,7 +228,8 @@ const options = {
                         currentPlayers: { type: "integer", example: 54321 },
                         price: { type: "number", nullable: true, example: 59.99 },
                         discountPercent: { type: "integer", example: 0 },
-                        currency: { type: "string", example: "EUR" }
+                        currency: { type: "string", example: "EUR" },
+                        source: { type: "string", enum: ["steam", "steamspy"], example: "steam" }
                     }
                 },
                 Trending: {
@@ -233,6 +247,7 @@ const options = {
                         price: { type: "number", nullable: true, example: 59.99 },
                         discountPercent: { type: "integer", example: 0 },
                         currency: { type: "string", example: "EUR" },
+                        source: { type: "string", enum: ["steam", "steamspy"], example: "steam" },
                         recordedAt: { type: "string", format: "date-time" }
                     }
                 },

@@ -6,6 +6,7 @@ const swaggerUi = require("swagger-ui-express");
 
 const swaggerSpec = require("./config/swagger");
 const { connectDB } = require("./config/db");
+const { iniciarSincronizacionAutomatica } = require("./services/stats.service");
 const logger = require("./middlewares/logger");
 const manejarErrores = require("./middlewares/manejarErrores");
 
@@ -62,6 +63,8 @@ async function arrancar() {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
     console.log(`Documentación en http://localhost:${PORT}/api-docs`);
   });
+  // Minutos entre sincronizaciones con Steam (60 por defecto, 0 para desactivarla)
+  iniciarSincronizacionAutomatica(Number(process.env.SYNC_MINUTOS ?? 60));
 }
 
 arrancar().catch((error) => {
