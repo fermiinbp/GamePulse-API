@@ -35,6 +35,16 @@ const options = {
                         ...propiedadesJuego
                     }
                 },
+                GamePage: {
+                    type: "object",
+                    properties: {
+                        data: { type: "array", items: { $ref: "#/components/schemas/Game" } },
+                        page: { type: "integer", example: 1 },
+                        limit: { type: "integer", example: 10 },
+                        total: { type: "integer", example: 8 },
+                        totalPages: { type: "integer", example: 1 }
+                    }
+                },
                 GameInput: {
                     type: "object",
                     required: ["steamAppId", "name"],

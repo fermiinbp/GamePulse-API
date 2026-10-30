@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 function generarToken(usuario) {
-  console.log("JWT_EXPIRES_IN:", JSON.stringify(process.env.JWT_EXPIRES_IN));
   return jwt.sign(
     {
       id: usuario.id,

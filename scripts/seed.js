@@ -30,7 +30,8 @@ async function seed() {
 
   // 3. Insertar datos nuevos
   const resultGames = await Game.insertMany(games);
-  const resultUsers = await User.insertMany(users);
+  // create (y no insertMany) para que se ejecute el pre("save") que cifra la contraseña
+  const resultUsers = await User.create(users);
 
   console.log(`Juegos insertados: ${resultGames.length}`);
   console.log(`Usuarios insertados: ${resultUsers.length}`);

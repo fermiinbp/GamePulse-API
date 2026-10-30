@@ -1,6 +1,7 @@
 require("dotenv").config({ quiet: true });
 
 const express = require("express");
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 
 const swaggerSpec = require("./config/swagger");
@@ -16,6 +17,9 @@ const routerAdmin = require("./routes/admin.routes");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CORS: URLs del front separadas por comas en CORS_ORIGIN (sin definir = cualquier origen)
+const origenes = process.env.CORS_ORIGIN?.split(",").map((o) => o.trim());
+app.use(cors({ origin: origenes || "*" }));
 
 app.use(express.json());
 app.use(logger);

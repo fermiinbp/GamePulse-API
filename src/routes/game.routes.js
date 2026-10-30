@@ -3,7 +3,7 @@ const validarId = require("../middlewares/validarId");
 const autenticar = require("../middlewares/autenticar");
 const autorizar = require("../middlewares/autorizar");
 const { historial, trending } = require("../controllers/stats.controller");
-const { listar, obtener, crear, actualizar, eliminar } = require("../controllers/game.controller");
+const { listar, generos, obtener, crear, actualizar, eliminar } = require("../controllers/game.controller");
 
 const router = Router();
 
@@ -12,26 +12,68 @@ const router = Router();
  * /api/games:
  *   get:
  *     tags: [Games]
- *     summary: Listar videojuegos
- *     description: Devuelve hasta 20 videojuegos ordenados por nombre, con filtro opcional por género.
+ *     summary: Listar videojuegos con paginación y filtros
+ *     description: Todos los filtros son opcionales y se pueden combinar.
  *     parameters:
  *       - in: query
+ *         name: page
+ *         schema: { type: integer, minimum: 1, default: 1 }
+ *         description: Número de página
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer, minimum: 1, maximum: 50, default: 10 }
+ *         description: Videojuegos por página
+ *       - in: query
  *         name: genero
- *         schema:
- *           type: string
- *         description: Filtra por género
+ *         schema: { type: string }
+ *         description: Filtra por género exacto
  *         example: RPG
+ *       - in: query
+ *         name: buscar
+ *         schema: { type: string }
+ *         description: Busca por nombre (no distingue mayúsculas)
+ *         example: elden
+ *       - in: query
+ *         name: gratis
+ *         schema: { type: string, enum: ["true", "false"] }
+ *         description: Solo gratuitos (true) o solo de pago (false)
+ *       - in: query
+ *         name: desarrollador
+ *         schema: { type: string }
+ *         description: Filtra por desarrolladora exacta
+ *         example: FromSoftware
+ *       - in: query
+ *         name: orden
+ *         schema: { type: string, enum: [name, -name, releaseDate, -releaseDate], default: name }
+ *         description: Campo de orden; con "-" delante es descendente
  *     responses:
  *       200:
- *         description: Lista de videojuegos
+ *         description: Página de videojuegos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GamePage'
+ */
+router.get("/", listar);
+
+/**
+ * @openapi
+ * /api/games/genres:
+ *   get:
+ *     tags: [Games]
+ *     summary: Listar todos los géneros disponibles
+ *     description: Útil para rellenar el desplegable de filtros del front.
+ *     responses:
+ *       200:
+ *         description: Géneros ordenados alfabéticamente
  *         content:
  *           application/json:
  *             schema:
  *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Game'
+ *               items: { type: string }
+ *               example: ["Action", "Adventure", "RPG"]
  */
-router.get("/", listar);
+router.get("/genres", generos);
 
 /**
  * @openapi
