@@ -3,7 +3,13 @@ const validarId = require("../middlewares/validarId");
 const autenticar = require("../middlewares/autenticar");
 const autorizar = require("../middlewares/autorizar");
 const { historial, trending } = require("../controllers/stats.controller");
-const { listar, obtener, crear, actualizar, eliminar } = require("../controllers/game.controller");
+const {
+  listar,
+  obtener,
+  crear,
+  actualizar,
+  eliminar,
+} = require("../controllers/game.controller");
 
 const router = Router();
 
@@ -34,7 +40,6 @@ const router = Router();
 router.get("/", listar);
 
 router.get("/trending", trending);
-
 
 router.get("/:id/stats", validarId, historial);
 
@@ -147,7 +152,13 @@ router.post("/", autenticar, autorizar("admin"), crear);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.patch("/:id", autenticar, autorizar("admin", "analista"), validarId, actualizar);
+router.patch(
+  "/:id",
+  autenticar,
+  autorizar("admin", "analista"),
+  validarId,
+  actualizar,
+);
 
 /**
  * @openapi

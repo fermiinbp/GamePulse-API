@@ -20,8 +20,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "La contraseña es obligatoria"],
-    minLength: [6, "La contraseña debe ser de minimo 6 caracteres"],
-    maxLength: [20, "La constraseña debe tener como maximo 20 caracteres"],
+    /*  minLength: [6, "La contraseña debe ser de minimo 6 caracteres"],
+    maxLength: [20, "La constraseña debe tener como maximo 20 caracteres"], */
     select: false,
   },
   role: {
@@ -50,7 +50,7 @@ userSchema.set("toJson", {
       id: doc.id,
       nombre: ret.nombre,
       email: ret.email,
-      rol: ret.rol,
+      role: ret.role,
     };
   },
 });
