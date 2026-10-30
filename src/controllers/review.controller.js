@@ -1,12 +1,11 @@
 const reviewService = require("../services/review.service");
 const gamesService = require("../services/game.service");
 
-// El autor de la reseña o un admin
 function puedeTocar(review, usuario) {
     return review.userId.toString() === usuario.id || usuario.role === "ADMIN";
 }
 
-// GET /review  (opcional: ?game=ID)
+// GET /review 
 async function listar(req, res) {
     const reviews = await reviewService.listar(req.query.game);
     res.json(reviews.map(r => r.resumen()));

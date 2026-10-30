@@ -16,7 +16,7 @@ const routerAdmin = require("./routes/admin.routes");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares globales
+
 app.use(express.json());
 app.use(logger);
 
@@ -38,22 +38,19 @@ app.use(logger);
  */
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
-// Documentación
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Página de inicio: al entrar en la raíz se abre la documentación
+
 app.get("/", (req, res) => res.redirect("/api-docs"));
 
-// Rutas
 app.use("/api/auth", routerAuth);
 app.use("/api/games", routerGames);
 app.use("/api/reviews", routerReviews);
 app.use("/api/admin", routerAdmin);
 
-// Ruta no encontrada
 app.use((req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
 
-// Manejo de errores (siempre el último)
 app.use(manejarErrores);
 
 async function arrancar() {
