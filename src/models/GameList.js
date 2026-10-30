@@ -10,12 +10,14 @@ const gameListSchema = new mongoose.Schema(
       maxlength: 50,
     },
 
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-      index: true,
-    },
+    owners: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true,
+      },
+    ],
 
     games: [
       {
@@ -39,7 +41,7 @@ gameListSchema.methods.resumen = function () {
   return {
     _id: this._id,
     name: this.name,
-    owner: this.owner,
+    owners: this.owners,
     games: this.games,
     isPublic: this.isPublic,
     createdAt: this.createdAt,
