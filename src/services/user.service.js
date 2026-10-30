@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const User = require("../models/User.js");
 
 async function listar() {
@@ -9,8 +8,4 @@ async function buscarPorId(id) {
   return User.findById(id);
 }
 
-function esIdValida(id) {
-  return mongoose.isValidObjectId(id);
-}
-
-module.exports = { listar, buscarPorId, esIdValida };
+module.exports = { listar, buscarPorId };

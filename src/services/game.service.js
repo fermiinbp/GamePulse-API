@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const Game = require("../models/Game.js");
 
 // Campos por los que se permite ordenar (con "-" delante es descendente)
@@ -59,8 +58,4 @@ async function eliminar(id) {
     return Game.findByIdAndDelete(id);
 }
 
-function esIdValido(id) {
-    return mongoose.isValidObjectId(id);
-}
-
-module.exports = { listar, generos, buscarPorId, crear, actualizar, eliminar, esIdValido};
+module.exports = { listar, generos, buscarPorId, crear, actualizar, eliminar };

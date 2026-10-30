@@ -3,7 +3,7 @@ function manejarErrores(err, req, res, next) {
     return res.status(400).json({ error: "El body está mal" });
   }
   if (err.name === "ValidationError") {
-    const errores = Object.values(err.errors).map((e) => e.message);
+    const errores = Object.values(err.errors).map((e) => ({ campo: e.path, mensaje: e.message }));
     return res.status(400).json({ error: "Los datos no son validos", detalles: errores });
   }
   if (err.name === "CastError") {

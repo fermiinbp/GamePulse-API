@@ -14,14 +14,55 @@ const propiedadesJuego = {
     isFree: { type: "boolean", example: false }
 };
 
+// Respuesta de error con un único ejemplo
+function respuestaError(descripcion, mensaje) {
+    return {
+        description: descripcion,
+        content: {
+            "application/json": {
+                schema: { $ref: "#/components/schemas/Error" },
+                example: { error: mensaje }
+            }
+        }
+    };
+}
+
+// Respuesta de error de validación (400) con la lista de campos que fallan
+function respuestaValidacion(descripcion, campo, mensaje) {
+    return {
+        description: descripcion,
+        content: {
+            "application/json": {
+                schema: { $ref: "#/components/schemas/ValidationError" },
+                example: { error: "Los datos no son validos", detalles: [{ campo, mensaje }] }
+            }
+        }
+    };
+}
+
 const options = {
     definition: {
         openapi: "3.0.0",
         info: {
             title: "GamePulse API",
             version: "1.0.0",
-            description: "API REST de videojuegos con datos de Steam"
+            description: [
+                "API REST de videojuegos con datos de Steam.",
+                "",
+                "**Autenticación:** haz login en `POST /api/auth/login`, copia el `token` y pégalo en el botón **Authorize**.",
+                "",
+                "**Roles:** `USER` (reseñas), `ANALYST` (estadísticas y editar juegos) y `ADMIN` (todo).",
+                "",
+                "**Errores:** todos devuelven `{ \"error\": \"mensaje\" }`. Los de validación (400) añaden `detalles` con el campo que falla y el motivo."
+            ].join("\n")
         },
+        tags: [
+            { name: "Health", description: "Estado de la API" },
+            { name: "Auth", description: "Registro, login y perfil" },
+            { name: "Games", description: "Catálogo de videojuegos y sus estadísticas" },
+            { name: "Reviews", description: "Reseñas de los usuarios" },
+            { name: "Admin", description: "Tareas de administración" }
+        ],
         servers: [{ url: "/", description: "Servidor actual" }],
         components: {
             securitySchemes: {
@@ -172,17 +213,66 @@ const options = {
                 },
                 Error: {
                     type: "object",
-                    properties: { error: { type: "string", example: "Videojuego no encontrado" } }
+                    description: "Formato de todos los errores de la API",
+                    properties: { error: { type: "string", description: "Mensaje del error" } }
+                },
+                ValidationError: {
+                    type: "object",
+                    description: "Error de validación: indica qué campo falla y por qué",
+                    properties: {
+                        error: { type: "string", example: "Los datos no son validos" },
+                        detalles: {
+                            type: "array",
+                            items: {
+                                type: "object",
+                                properties: {
+                                    campo: { type: "string", example: "rating" },
+                                    mensaje: { type: "string", example: "La nota debe ser un número entero del 1 al 5" }
+                                }
+                            }
+                        }
+                    }
                 }
             },
+            // Respuestas de error reutilizables, cada una con su mensaje real
             responses: {
+                IdNoValido: respuestaValidacion("El id de la URL no es un id de MongoDB válido", "id", "El id no es válido"),
                 NoAutenticado: {
                     description: "Falta el token o no es válido",
-                    content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } }
+                    content: {
+                        "application/json": {
+                            schema: { $ref: "#/components/schemas/Error" },
+                            examples: {
+                                faltaToken: { summary: "No se ha enviado token", value: { error: "falta Token" } },
+                                tokenNoValido: { summary: "Token caducado o manipulado", value: { error: "Token no valido" } }
+                            }
+                        }
+                    }
                 },
-                SinPermisos: {
-                    description: "El usuario no tiene el rol necesario",
-                    content: { "application/json": { schema: { $ref: "#/components/schemas/Error" } } }
+                SinPermisos: respuestaError("Tu rol no tiene acceso a esta ruta", "No tienes permisos"),
+                CredencialesIncorrectas: respuestaError("El email o la contraseña no coinciden", "Email o contraseñas incorrectas"),
+                JuegoNoEncontrado: respuestaError("No existe ningún videojuego con ese id", "Videojuego no encontrado"),
+                ReviewNoEncontrada: respuestaError("No existe ninguna reseña con ese id", "Reseña no encontrada"),
+                UsuarioNoEncontrado: respuestaError("El usuario del token ya no existe", "Usuario no encontrado"),
+                ValorRepetido: respuestaError("Ya existe un registro con ese valor único", "Valor repetido"),
+                ErrorServidor: respuestaError("Error inesperado en el servidor", "Error de servidor interno")
+            },
+            parameters: {
+                GameId: {
+                    in: "path",
+                    name: "id",
+                    required: true,
+                    schema: { type: "string" },
+                    description: "Id del videojuego en MongoDB",
+                    example: "665f1c2e9b1e8a0012a3b4c5"
+                },
+                ReviewId: {
+                    in: "path",
+                    name: "id",
+                    required: true,
+                    schema: { type: "string" },
+                    description: "Id de la reseña en MongoDB",
+                    example: "665f1c2e9b1e8a0012a3b4c7"
                 }
             }
         }

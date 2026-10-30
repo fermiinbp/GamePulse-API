@@ -7,10 +7,6 @@ async function registro(req, res) {
 
 async function login(req, res) {
   const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ error: "Email o password OBLIGATORIO" });
-  }
-
   const resultado = await authService.login(email, password);
   if (!resultado) {
     return res.status(401).json({ error: "Email o contraseñas incorrectas" });

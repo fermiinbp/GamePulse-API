@@ -15,10 +15,6 @@ async function listar(req, res) {
 async function crear(req, res) {
     const { gameId, rating, comment } = req.body;
 
-    if (typeof gameId !== "string") {
-        return res.status(400).json({ error: "El gameId es obligatorio" });
-    }
-
     const juego = await gamesService.buscarPorId(gameId);
     if (!juego) {
         return res.status(404).json({ error: "Videojuego no encontrado" });

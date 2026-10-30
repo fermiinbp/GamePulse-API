@@ -11,7 +11,9 @@ const router = Router();
  *   post:
  *     tags: [Admin]
  *     summary: Sincronizar estadísticas con Steam
- *     description: Pide a Steam los jugadores y el precio de cada videojuego y guarda una foto. Solo ADMIN.
+ *     description: |
+ *       Pide a Steam los jugadores conectados y el precio de cada videojuego y guarda una foto en `game_stats`.
+ *       Si falla un juego, se apunta en `errores` y se sigue con los demás. Solo `ADMIN`.
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -25,6 +27,8 @@ const router = Router();
  *         $ref: '#/components/responses/NoAutenticado'
  *       403:
  *         $ref: '#/components/responses/SinPermisos'
+ *       500:
+ *         $ref: '#/components/responses/ErrorServidor'
  */
 router.post("/sync", autenticar, autorizar("ADMIN"), sincronizar);
 
