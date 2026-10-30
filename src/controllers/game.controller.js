@@ -1,6 +1,6 @@
 const gamesService = require("../services/game.service")
 
-// GET /api/games?page=1&limit=10&genero=RPG&buscar=elden&gratis=true&desarrollador=FromSoftware&orden=-releaseDate
+// GET /games?page=1&limit=10&genero=RPG&buscar=elden&gratis=true&desarrollador=FromSoftware&orden=-releaseDate
 async function listar(req, res) {
     // page mínimo 1; limit entre 1 y 50 (10 por defecto)
     const page = Math.max(parseInt(req.query.page) || 1, 1);
@@ -18,7 +18,7 @@ async function listar(req, res) {
     });
 }
 
-// GET /api/games/genres
+// GET /games/genres
 async function generos(req, res) {
     res.json(await gamesService.generos());
 }

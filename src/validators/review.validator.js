@@ -22,7 +22,7 @@ const actualizar = [
   comment(),
 ];
 
-// Query de GET /api/reviews
+// Query de GET /reviews
 const listar = [
   query("game")
     .optional()

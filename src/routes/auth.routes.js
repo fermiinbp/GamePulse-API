@@ -8,7 +8,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * /api/auth/registro:
+ * /auth/registro:
  *   post:
  *     tags: [Auth]
  *     summary: Registrar un usuario nuevo
@@ -56,7 +56,7 @@ router.post("/registro", authValidator.registro, validarCampos, registro);
 
 /**
  * @openapi
- * /api/auth/login:
+ * /auth/login:
  *   post:
  *     tags: [Auth]
  *     summary: Iniciar sesión
@@ -95,7 +95,7 @@ router.post("/login", authValidator.login, validarCampos, login);
 
 /**
  * @openapi
- * /api/auth/perfil:
+ * /auth/perfil:
  *   get:
  *     tags: [Auth]
  *     summary: Ver el perfil del usuario logueado

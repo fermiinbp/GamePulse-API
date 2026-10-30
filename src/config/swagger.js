@@ -49,7 +49,7 @@ const options = {
             description: [
                 "API REST de videojuegos con datos de Steam.",
                 "",
-                "**Autenticación:** haz login en `POST /api/auth/login`, copia el `token` y pégalo en el botón **Authorize**.",
+                "**Autenticación:** haz login en `POST /auth/login`, copia el `token` y pégalo en el botón **Authorize**.",
                 "",
                 "**Roles:** `USER` (reseñas), `ANALYST` (estadísticas y editar juegos) y `ADMIN` (todo).",
                 "",
@@ -61,6 +61,7 @@ const options = {
             { name: "Auth", description: "Registro, login y perfil" },
             { name: "Games", description: "Catálogo de videojuegos y sus estadísticas" },
             { name: "Reviews", description: "Reseñas de los usuarios" },
+            { name: "GameList", description: "Listas de videojuegos de los usuarios" },
             { name: "Admin", description: "Tareas de administración" }
         ],
         servers: [{ url: "/", description: "Servidor actual" }],
@@ -69,6 +70,48 @@ const options = {
                 bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" }
             },
             schemas: {
+                // Listas de videojuegos (GameList)
+                GameList: {
+                    type: "object",
+                    properties: {
+                        _id: { type: "string", example: "671c00000000000000000001" },
+                        name: { type: "string", example: "Mis juegos favoritos" },
+                        games: { type: "array", items: { type: "string" }, example: ["671b00000000000000000001", "671b00000000000000000002"] },
+                        owners: { type: "array", items: { type: "string" }, example: ["671a0000000000000000000a"] },
+                        isPublic: { type: "boolean", example: true }
+                    }
+                },
+                GameListInput: {
+                    type: "object",
+                    required: ["name"],
+                    properties: {
+                        name: { type: "string", example: "Mis juegos favoritos" },
+                        games: { type: "array", items: { type: "string" }, example: ["671b00000000000000000001"] },
+                        isPublic: { type: "boolean", example: true }
+                    }
+                },
+                GameListUpdate: {
+                    type: "object",
+                    properties: {
+                        name: { type: "string", example: "Juegos pendientes" },
+                        games: { type: "array", items: { type: "string" }, example: ["671b00000000000000000001"] },
+                        isPublic: { type: "boolean", example: false }
+                    }
+                },
+                GameListAddGame: {
+                    type: "object",
+                    required: ["gameId"],
+                    properties: {
+                        gameId: { type: "string", example: "671b00000000000000000001" }
+                    }
+                },
+                GameListUpdateOwners: {
+                    type: "object",
+                    required: ["owners"],
+                    properties: {
+                        owners: { type: "array", items: { type: "string" }, example: ["671a0000000000000000000a", "671a0000000000000000000b"] }
+                    }
+                },
                 Game: {
                     type: "object",
                     properties: {

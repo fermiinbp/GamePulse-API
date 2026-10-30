@@ -10,7 +10,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/reviews:
+ * /reviews:
  *   get:
  *     tags: [Reviews]
  *     summary: Listar reseñas
@@ -44,7 +44,7 @@ router.get("/", reviewValidator.listar, validarCampos, listar);
 
 /**
  * @openapi
- * /api/reviews/stats:
+ * /reviews/stats:
  *   get:
  *     tags: [Reviews]
  *     summary: Contar reseñas positivas y negativas
@@ -69,7 +69,7 @@ router.get("/stats", autenticar, autorizar("ANALYST", "ADMIN"), estadisticas);
 
 /**
  * @openapi
- * /api/reviews:
+ * /reviews:
  *   post:
  *     tags: [Reviews]
  *     summary: Crear una reseña
@@ -128,7 +128,7 @@ router.post("/", autenticar, autorizar("USER", "ADMIN"), reviewValidator.crear, 
 
 /**
  * @openapi
- * /api/reviews/{id}:
+ * /reviews/{id}:
  *   put:
  *     tags: [Reviews]
  *     summary: Actualizar una reseña
@@ -187,7 +187,7 @@ router.put("/:id", autenticar, autorizar("USER", "ADMIN"), idParam, reviewValida
 
 /**
  * @openapi
- * /api/reviews/{id}:
+ * /reviews/{id}:
  *   delete:
  *     tags: [Reviews]
  *     summary: Eliminar una reseña

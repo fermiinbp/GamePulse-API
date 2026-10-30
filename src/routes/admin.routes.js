@@ -7,7 +7,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/admin/sync:
+ * /admin/sync:
  *   post:
  *     tags: [Admin]
  *     summary: Sincronizar estadísticas con Steam

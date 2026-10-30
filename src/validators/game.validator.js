@@ -46,7 +46,7 @@ function camposJuego(obligatorio) {
 const crear = camposJuego(true);
 const actualizar = camposJuego(false);
 
-// Query de GET /api/games
+// Query de GET /games
 const listar = [
   query("page")
     .optional()
@@ -71,7 +71,7 @@ const listar = [
     .isIn(ORDENES).withMessage(`orden debe ser uno de: ${ORDENES.join(", ")}`),
 ];
 
-// Query de GET /api/games/trending
+// Query de GET /games/trending
 const trending = [
   query("limit")
     .optional()

@@ -11,7 +11,7 @@ const router = Router();
 
 /**
  * @openapi
- * /api/games:
+ * /games:
  *   get:
  *     tags: [Games]
  *     summary: Listar videojuegos con paginación y filtros
@@ -75,7 +75,7 @@ router.get("/", gameValidator.listar, validarCampos, listar);
 
 /**
  * @openapi
- * /api/games/genres:
+ * /games/genres:
  *   get:
  *     tags: [Games]
  *     summary: Listar todos los géneros disponibles
@@ -96,13 +96,13 @@ router.get("/genres", generos);
 
 /**
  * @openapi
- * /api/games/trending:
+ * /games/trending:
  *   get:
  *     tags: [Games]
  *     summary: Videojuegos con más jugadores
  *     description: |
  *       Usa la última foto de estadísticas de cada juego y los ordena por jugadores.
- *       Si nunca se ha ejecutado `POST /api/admin/sync`, devuelve una lista vacía.
+ *       Si nunca se ha ejecutado `POST /admin/sync`, devuelve una lista vacía.
  *     parameters:
  *       - in: query
  *         name: limit
@@ -131,7 +131,7 @@ router.get("/trending", gameValidator.trending, validarCampos, trending);
 
 /**
  * @openapi
- * /api/games/{id}/stats:
+ * /games/{id}/stats:
  *   get:
  *     tags: [Games]
  *     summary: Historial de estadísticas de un videojuego
@@ -158,7 +158,7 @@ router.get("/:id/stats", idParam, validarCampos, historial);
 
 /**
  * @openapi
- * /api/games/{id}:
+ * /games/{id}:
  *   get:
  *     tags: [Games]
  *     summary: Obtener un videojuego por id
@@ -182,7 +182,7 @@ router.get("/:id", idParam, validarCampos, obtener);
 
 /**
  * @openapi
- * /api/games:
+ * /games:
  *   post:
  *     tags: [Games]
  *     summary: Crear un videojuego
@@ -236,7 +236,7 @@ router.post("/", autenticar, autorizar("ADMIN"), gameValidator.crear, validarCam
 
 /**
  * @openapi
- * /api/games/{id}:
+ * /games/{id}:
  *   patch:
  *     tags: [Games]
  *     summary: Actualizar un videojuego
@@ -294,7 +294,7 @@ router.patch("/:id", autenticar, autorizar("ADMIN", "ANALYST"), idParam, gameVal
 
 /**
  * @openapi
- * /api/games/{id}:
+ * /games/{id}:
  *   delete:
  *     tags: [Games]
  *     summary: Eliminar un videojuego

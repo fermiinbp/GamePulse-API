@@ -12,6 +12,7 @@ const manejarErrores = require("./middlewares/manejarErrores");
 const routerAuth = require("./routes/auth.routes");
 const routerGames = require("./routes/game.routes");
 const routerReviews = require("./routes/review.routes");
+const routerGameList = require("./routes/gamelist.routes");
 const routerAdmin = require("./routes/admin.routes");
 
 const app = express();
@@ -26,7 +27,7 @@ app.use(logger);
 
 /**
  * @openapi
- * /api/health:
+ * /health:
  *   get:
  *     tags: [Health]
  *     summary: Comprobar que la API está levantada
@@ -40,18 +41,16 @@ app.use(logger);
  *               properties:
  *                 status: { type: string, example: ok }
  */
-app.get("/api/health", (req, res) => res.json({ status: "ok" }));
-
+app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-
 app.get("/", (req, res) => res.redirect("/api-docs"));
 
-app.use("/api/auth", routerAuth);
-app.use("/api/games", routerGames);
-app.use("/api/reviews", routerReviews);
-app.use("/api/admin", routerAdmin);
+app.use("/auth", routerAuth);
+app.use("/games", routerGames);
+app.use("/reviews", routerReviews);
+app.use("/gamelist", routerGameList);
+app.use("/admin", routerAdmin);
 
 app.use((req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
 

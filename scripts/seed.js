@@ -4,6 +4,8 @@ const Game = require("../src/models/Game");
 const User = require("../src/models/User");
 const games = require("./games.json");
 const users = require("./users.json");
+const GameList = require("../src/models/GameList");
+const gamelist = require("./gamelist.json");
 
 async function dropIfExists(model) {
   try {
@@ -23,18 +25,22 @@ async function seed() {
   // 1. Eliminar colecciones (incluye los índices antiguos)
   await dropIfExists(Game);
   await dropIfExists(User);
+  await dropIfExists(GameList);
 
   // 2. Recrear colecciones e índices según los schemas actuales
   await Game.syncIndexes();
   await User.syncIndexes();
+  await GameList.syncIndexes();
 
   // 3. Insertar datos nuevos
   const resultGames = await Game.insertMany(games);
   // create (y no insertMany) para que se ejecute el pre("save") que cifra la contraseña
   const resultUsers = await User.create(users);
+  const resultGameList = await GameList.insertMany(gamelist);
 
   console.log(`Juegos insertados: ${resultGames.length}`);
   console.log(`Usuarios insertados: ${resultUsers.length}`);
+  console.log(`GameList insertados: ${resultGameList.length}`);
 
   await mongoose.disconnect();
 }
