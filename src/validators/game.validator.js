@@ -2,8 +2,6 @@ const { body, query } = require("express-validator");
 
 const ORDENES = ["name", "-name", "releaseDate", "-releaseDate"];
 
-// Reglas de los campos de un videojuego.
-// "obligatorio" indica si steamAppId y name deben venir (crear) o no (actualizar).
 function camposJuego(obligatorio) {
   const steamAppId = body("steamAppId");
   const name = body("name");
@@ -46,7 +44,6 @@ function camposJuego(obligatorio) {
 const crear = camposJuego(true);
 const actualizar = camposJuego(false);
 
-// Query de GET /games
 const listar = [
   query("page")
     .optional()
@@ -71,7 +68,6 @@ const listar = [
     .isIn(ORDENES).withMessage(`orden debe ser uno de: ${ORDENES.join(", ")}`),
 ];
 
-// Query de GET /games/trending
 const trending = [
   query("limit")
     .optional()

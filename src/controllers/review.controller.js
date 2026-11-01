@@ -5,13 +5,11 @@ function puedeTocar(review, usuario) {
     return review.userId.toString() === usuario.id || usuario.role === "ADMIN";
 }
 
-// GET /review 
 async function listar(req, res) {
     const reviews = await reviewService.listar(req.query.game);
     res.json(reviews.map(r => r.resumen()));
 }
 
-// POST /review
 async function crear(req, res) {
     const { gameId, rating, comment } = req.body;
 
@@ -30,7 +28,6 @@ async function crear(req, res) {
     res.status(201).json(review.resumen());
 }
 
-// PUT /review/:id
 async function actualizar(req, res) {
     const review = await reviewService.buscarPorId(req.params.id);
     if (!review) {
@@ -46,7 +43,6 @@ async function actualizar(req, res) {
     res.json(actualizada.resumen());
 }
 
-// DELETE /review/:id
 async function eliminar(req, res) {
     const review = await reviewService.buscarPorId(req.params.id);
     if (!review) {
@@ -60,7 +56,6 @@ async function eliminar(req, res) {
     res.status(204).end();
 }
 
-// GET /review/stats
 async function estadisticas(req, res) {
     res.json(await reviewService.estadisticas());
 }

@@ -13,7 +13,6 @@ function manejarErrores(err, req, res, next) {
     return res.status(409).json({ error: "Valor repetido" });
   }
 
-  // Errores con status 4xx (por ejemplo, los que lanza express) se devuelven tal cual
   if (err.status && err.status < 500) {
     return res.status(err.status).json({ error: err.message });
   }

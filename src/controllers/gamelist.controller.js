@@ -71,9 +71,6 @@ async function buscarPorId(req, res) {
   res.json(gamelist);
 }
 
-//CRUD
-
-//POST
 async function crearGameList(req, res) {
   const { name, games = [], isPublic = false } = req.body;
   const datos = {

@@ -1,9 +1,7 @@
 const Game = require("../models/Game.js");
 
-// Campos por los que se permite ordenar (con "-" delante es descendente)
 const ORDENES = ["name", "-name", "releaseDate", "-releaseDate"];
 
-// Escapa caracteres especiales para usar el texto en una RegExp
 function escaparRegex(texto) {
     return texto.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -29,7 +27,6 @@ async function listar({ genero, buscar, gratis, desarrollador, orden, page = 1, 
     return { data, total };
 }
 
-// Géneros distintos, para rellenar los filtros del front
 async function generos() {
     const lista = await Game.distinct("genres");
     return lista.sort();

@@ -1,7 +1,6 @@
 const path = require("path");
 const swaggerJsdoc = require("swagger-jsdoc");
 
-// Campos de un videojuego, reutilizados en varios esquemas
 const propiedadesJuego = {
     steamAppId: { type: "integer", example: 1245620 },
     name: { type: "string", example: "ELDEN RING" },
@@ -14,7 +13,6 @@ const propiedadesJuego = {
     isFree: { type: "boolean", example: false }
 };
 
-// Respuesta de error con un único ejemplo
 function respuestaError(descripcion, mensaje) {
     return {
         description: descripcion,
@@ -27,7 +25,6 @@ function respuestaError(descripcion, mensaje) {
     };
 }
 
-// Respuesta de error de validación (400) con la lista de campos que fallan
 function respuestaValidacion(descripcion, campo, mensaje) {
     return {
         description: descripcion,
@@ -70,7 +67,6 @@ const options = {
                 bearerAuth: { type: "http", scheme: "bearer", bearerFormat: "JWT" }
             },
             schemas: {
-                // Listas de videojuegos (GameList)
                 GameList: {
                     type: "object",
                     properties: {
@@ -335,8 +331,6 @@ const options = {
             }
         }
     },
-    // Rutas absolutas para que funcione sin importar desde qué carpeta se arranque
-    // glob solo entiende "/", así que se cambian las "\" que usa Windows
     apis: [
         path.join(__dirname, "../server.js"),
         path.join(__dirname, "../routes/*.js")

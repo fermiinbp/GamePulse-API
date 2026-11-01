@@ -19,7 +19,7 @@ const routerAdmin = require("./routes/admin.routes");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS: URLs del front separadas por comas en CORS_ORIGIN (sin definir = cualquier origen)
+
 const origenes = process.env.CORS_ORIGIN?.split(",").map((o) => o.trim());
 app.use(cors({ origin: origenes || "*" }));
 
@@ -63,7 +63,6 @@ async function arrancar() {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
     console.log(`Documentación en http://localhost:${PORT}/api-docs`);
   });
-  // Minutos entre sincronizaciones con Steam (60 por defecto, 0 para desactivarla)
   iniciarSincronizacionAutomatica(Number(process.env.SYNC_MINUTOS ?? 60));
 }
 

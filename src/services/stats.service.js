@@ -2,13 +2,11 @@ const Game = require("../models/Game");
 const GameStat = require("../models/GameStat");
 const steam = require("./steam.service");
 
-// Pide a Steam los datos de un juego y guarda una foto
 async function registrarSnapshot(juego) {
     const datos = await steam.obtenerDatos(juego.steamAppId);
     return GameStat.create({ gameId: juego._id, ...datos });
 }
 
-// Recorre todos los juegos; si uno falla, sigue con los demás
 async function sincronizar() {
     const juegos = await Game.find();
     const errores = [];
@@ -26,8 +24,6 @@ async function sincronizar() {
     return { total: juegos.length, correctos, errores };
 }
 
-// Sincroniza al arrancar y luego cada X minutos, sin que nadie tenga que llamar a /admin/sync.
-// Si la última foto es reciente (por ejemplo, tras reiniciar la API) se salta esa vuelta.
 function iniciarSincronizacionAutomatica(minutos) {
     if (!minutos || minutos <= 0) {
         console.log("Sincronización automática con Steam desactivada");
@@ -63,7 +59,6 @@ async function historial(gameId, limite = 30) {
     return GameStat.find({ gameId }).sort({ recordedAt: -1 }).limit(limite);
 }
 
-// Última foto de cada juego de la lista, como { idJuego: foto }
 async function ultimasDe(gameIds) {
     const resultados = await GameStat.aggregate([
         { $match: { gameId: { $in: gameIds } } },
@@ -79,7 +74,6 @@ async function ultimasDe(gameIds) {
     return mapa;
 }
 
-// Última foto de cada juego, ordenadas por jugadores
 async function trending(limite = 5) {
     const resultados = await GameStat.aggregate([
         { $sort: { recordedAt: -1 } },

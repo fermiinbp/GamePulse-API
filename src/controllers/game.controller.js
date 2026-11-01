@@ -1,15 +1,12 @@
 const gamesService = require("../services/game.service");
 const statsService = require("../services/stats.service");
 
-// Añade a cada juego su último dato de Steam (precio y jugadores), o null si aún no hay
 async function conUltimaStat(juegos) {
     const ultimas = await statsService.ultimasDe(juegos.map((g) => g._id));
     return juegos.map((g) => ({ ...g.resumen(), ultimaStat: ultimas[g.id] || null }));
 }
 
-// GET /games?page=1&limit=10&genero=RPG&buscar=elden&gratis=true&desarrollador=FromSoftware&orden=-releaseDate
 async function listar(req, res) {
-    // page mínimo 1; limit entre 1 y 50 (10 por defecto)
     const page = Math.max(parseInt(req.query.page) || 1, 1);
     const limit = Math.min(Math.max(parseInt(req.query.limit) || 10, 1), 50);
     const { genero, buscar, gratis, desarrollador, orden } = req.query;
@@ -25,7 +22,6 @@ async function listar(req, res) {
     });
 }
 
-// GET /games/genres
 async function generos(req, res) {
     res.json(await gamesService.generos());
 }
