@@ -29,8 +29,14 @@ async function listarGameList(filtros, orden, pagina, limite) {
   return { gameslists, total };
 }
 
-async function buscarPorId(id) {
-  return GameList.findById(id);
+async function buscarPorId(req, res) {
+  const gamelist = await gamelistService.buscarPorId(req.params.id);
+
+  if (!gamelist) {
+    return res.status(404).json({ error: "No encontrado" });
+  }
+
+  res.json(gamelist.resumen());
 }
 
 async function crearGameList(datos) {

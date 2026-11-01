@@ -24,14 +24,14 @@ async function seed() {
   });
 
   // 1. Eliminar colecciones (incluye los índices antiguos)
-  await dropIfExists(Game);
-  await dropIfExists(User);
-  await dropIfExists(GameList);
+  // await dropIfExists(Game);
+  // await dropIfExists(User);
+  // await dropIfExists(GameList);
 
   // 2. Recrear colecciones e índices según los schemas actuales
-  await Game.syncIndexes();
-  await User.syncIndexes();
-  await GameList.syncIndexes();
+  // await Game.syncIndexes();
+  // await User.syncIndexes();
+  // await GameList.syncIndexes();
 
   // 3. Insertar datos nuevos
   const resultGames = await Game.insertMany(games);
@@ -44,8 +44,8 @@ async function seed() {
   const resultUsers = await User.insertMany(usersConPasswordHash);
   const resultGameList = await GameList.insertMany(gamelist);
 
-  console.log(`Juegos insertados: ${resultGames.length}`);
-  console.log(`Usuarios insertados: ${resultUsers.length}`);
+  // console.log(`Juegos insertados: ${resultGames.length}`);
+  // console.log(`Usuarios insertados: ${resultUsers.length}`);
   console.log(`GameList insertados: ${resultGameList.length}`);
 
   await mongoose.disconnect();

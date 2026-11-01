@@ -35,7 +35,7 @@ const gameListSchema = new mongoose.Schema(
   },
 );
 
-gameListSchema.index({ owner: 1, name: 1 });
+gameListSchema.index({ owners: 1, name: 1 });
 
 gameListSchema.methods.resumen = function () {
   return {
