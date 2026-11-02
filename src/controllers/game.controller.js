@@ -39,7 +39,13 @@ async function obtener(req, res) {
 
 async function crear(req, res) {
     const game = await gamesService.crear(req.body);
-    res.status(201).json(game.resumen());
+    try {
+        await statsService.registrarSnapshot(game);
+    } catch (err) {
+        console.error(`Sin datos de Steam para ${game.name}:`, err.message);
+    }
+    const [conStat] = await conUltimaStat([game]);
+    res.status(201).json(conStat);
 }
 
 async function actualizar(req, res) {
