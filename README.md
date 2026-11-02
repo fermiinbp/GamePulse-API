@@ -147,6 +147,30 @@ Para comprobar la conexión sin arrancar la API:
 node scripts/probar-steam.js 730 570
 ```
 
+## Añadir un juego al catálogo
+
+Para añadir un juego hace falta su **`steamAppId`**, el número con el que Steam lo identifica. Se puede consultar en:
+
+- **La tienda de Steam:** es el número que aparece en la URL de la página del juego, por ejemplo `https://store.steampowered.com/app/1245620/ELDEN_RING/` → `1245620`.
+- **[SteamDB](https://steamdb.info):** web no oficial que recopila los datos de Steam; al buscar un juego muestra su *AppID*.
+
+Después, con un token de ADMIN:
+
+```http
+POST /games
+Content-Type: application/json
+Authorization: Bearer <token>
+
+{
+  "steamAppId": 105600,
+  "name": "Terraria",
+  "genres": ["Action", "Adventure", "Indie"],
+  "headerImage": "https://cdn.akamai.steamstatic.com/steam/apps/105600/header.jpg"
+}
+```
+
+Al crearlo, la API pide a Steam sus jugadores y su precio en ese momento, y a partir de ahí se actualizan en cada sincronización. La imagen sigue siempre el patrón `https://cdn.akamai.steamstatic.com/steam/apps/<steamAppId>/header.jpg`.
+
 ## Roles
 
 | Acción | USER | ANALYST | ADMIN |
