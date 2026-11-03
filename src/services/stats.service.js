@@ -96,4 +96,4 @@ async function trending(limite = 5) {
     }));
 }
 
-module.exports = { sincronizar, iniciarSincronizacionAutomatica, historial, ultimasDe, trending };
+module.exports = { registrarSnapshot, sincronizar, iniciarSincronizacionAutomatica, historial, ultimasDe, trending };
