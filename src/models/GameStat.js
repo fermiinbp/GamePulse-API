@@ -7,7 +7,6 @@ const gameStatSchema = mongoose.Schema({
     price: { type: Number, min: 0 },
     discountPercent: { type: Number, min: 0, max: 100, default: 0 },
     currency: { type: String, default: "EUR" },
-    // De dónde salieron los datos: Steam o SteamSpy (respaldo)
     source: { type: String, enum: ["steam", "steamspy"], default: "steam" }
 });
 

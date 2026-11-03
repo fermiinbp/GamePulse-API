@@ -12,7 +12,6 @@ async function dropIfExists(model) {
     await model.collection.drop();
     console.log(`Colección "${model.collection.name}" eliminada`);
   } catch (err) {
-    // 26 = NamespaceNotFound: la colección aún no existe, no es un error real
     if (err.code !== 26) throw err;
   }
 }
